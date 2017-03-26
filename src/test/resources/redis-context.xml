@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- 连接池配置   -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!--控制一个pool最多有多少个状态为idle的jedis实例-->
+		<property name="maxIdle" value="10"></property>
+		<!--连接被驱逐前的最小空闲时间 毫秒-->
+		<property name="minEvictableIdleTimeMillis" value="300000"></property>
+		<!--每次逐出检查时 逐出的最大数目  默认3-->
+		<property name="numTestsPerEvictionRun" value="3"></property>
+		<!--驱逐扫描的时间间隔(毫秒) 如果为负数,则不运行驱逐线程, 默认-1-->
+		<property name="timeBetweenEvictionRunsMillis" value="60"></property>
+	</bean>
+    
+    <!--redis的连接池pool-->
+    <bean id="jedisSentinelPool" class="redis.clients.jedis.JedisSentinelPool">
+        <constructor-arg index="0" value="mymaster"/>
+        <constructor-arg index="1">
+            <set>
+                <value>redis-node1.itfeng.net:26379</value>
+                <value>redis-node2.itfeng.net:26379</value>
+            </set>
+        </constructor-arg>
+        <constructor-arg index="2" ref="jedisPoolConfig"/>
+    </bean>
+    <bean id="redisUtil" class="net.itfeng.util.RedisUtil">
+    	<property name="jedisPool" ref="jedisSentinelPool"/>
+    </bean>
+    <context:component-scan base-package="net.itfeng.util.RedisUtilTest"></context:component-scan>
+</beans>

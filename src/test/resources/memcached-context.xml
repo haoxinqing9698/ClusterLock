@@ -1,0 +1,16 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<bean name="memcachedClient"
+		class="net.rubyeye.xmemcached.utils.XMemcachedClientFactoryBean">
+		<property name="servers">
+			<value>memcached-node1.itfeng.net:11212 memcached-node2.itfeng.net:11212</value>
+		</property>
+	</bean>
+	<bean id="memcachedUtil" class="net.itfeng.util.MemcachedUtil">
+		<property name="memcachedClient" ref="memcachedClient"></property>
+	</bean>
+	<context:component-scan base-package="net.itfeng.util.MemcachedUtilTest"></context:component-scan>
+</beans>
