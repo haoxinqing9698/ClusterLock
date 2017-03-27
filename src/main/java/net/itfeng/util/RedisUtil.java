@@ -1,5 +1,7 @@
 package net.itfeng.util;
 
+import java.util.Arrays;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -156,7 +158,7 @@ public class RedisUtil {
 				return result;
 			}
 		}catch (Exception e) {
-			log.error(jedisPool+":"+key+":"+values, e);
+			log.error(jedisPool + ":" + key + ":" + Arrays.toString(values), e);
 		}finally{
 			closeJedis(jedis);
 		}
