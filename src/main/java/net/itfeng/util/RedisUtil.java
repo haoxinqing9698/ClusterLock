@@ -245,6 +245,45 @@ public class RedisUtil {
 		return defaultValue;
 	}
 	
+	/**
+	 * 根据key，将其值原子递增操作
+	 * @param key
+	 */
+	public void incr(String key){
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			jedis.incr(key);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeJedis(jedis);
+		}
+	}
+	
+	/**
+	 * 根据key，将其值原子递减操作
+	 * @param key
+	 */
+	public void decr(String key){
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			jedis.decr(key);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeJedis(jedis);
+		}
+	}
+	/**
+	 * 将Jedis对象返回连接池
+	 * 
+	 * @author itfeng at 2017年5月21日 下午6:21:20
+	 * @param jedis
+	 */
 	private void closeJedis(Jedis jedis){
 		if(jedis!=null){
 			try {
@@ -257,5 +296,7 @@ public class RedisUtil {
 	public void setJedisPool(Pool<Jedis> jedisPool) {
 		this.jedisPool = jedisPool;
 	}
+	
+	
 	
 }
